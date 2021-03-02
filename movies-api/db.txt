@@ -1,0 +1,5 @@
+usr_platzi_video
+pass_platzi_video
+db_platzi_video
+movies
+mongodb+srv://usr_platzi_video:<password>@cluster0.jzfnf.mongodb.net/test
