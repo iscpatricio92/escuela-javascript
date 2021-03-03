@@ -13,35 +13,35 @@ function moviesApi(app) {
 
     const moviesService = new MovieService();
 
-    /** all movies */
-    router.get('/', async (req, res, next) => {
+    router.get('/', async function(req, res, next) {
         const { tags } = req.query;
+        //throw new Error('Error forced')
         try {
-            const movies = await moviesService.getMovies({ tags })
-            res.status(200).json({
-                data: movies,
-                message: 'movies listed'
-            })
+          const movies = await moviesService.getMovies({ tags });
+    
+          res.status(200).json({
+            data: movies,
+            message: 'movies listed'
+          });
+        } catch (err) {
+          next(err);
         }
-        catch (err) {
-            next(err)
-        }
-    })
-
-    /** one movie*/
-    router.get('/:movieId', async (req, res, next) => {
+      });
+    
+      router.get('/:movieId', async function(req, res, next) {
         const { movieId } = req.params;
+    
         try {
-            const movies = await moviesService.getMovie({ movieId })
-            res.status(200).json({
-                data: movies,
-                message: 'movie retrieved'
-            })
+          const movies = await moviesService.getMovie({ movieId });
+    
+          res.status(200).json({
+            data: movies,
+            message: 'movie retrieved'
+          });
+        } catch (err) {
+          next(err);
         }
-        catch (err) {
-            next(err)
-        }
-    })
+      });
 
     /** create movie*/
     router.post('/', async (req, res, next) => {
@@ -103,6 +103,15 @@ function moviesApi(app) {
         catch (err) {
             next(err)
         }
+    })
+
+    router.get('/bisiesto/:year', (req, res) => {
+        let anio = req.params.year;
+        console.log(anio)
+        if ((anio % 4 === 0 && anio % 100 !== 0) || anio % 400 === 0)
+            res.send(`El año ${anio} es bisiesto.`)
+        else
+            res.send(`El año ${anio} NO es bisiesto.`)
     })
 
 }

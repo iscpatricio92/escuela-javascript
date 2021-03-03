@@ -1,27 +1,31 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
 
-const { config } = require('./config/index')
-const moviesApi = require('./routes/movies')
+const { config } = require('./config/index');
+const moviesApi = require('./routes/movies.js');
 
-//body parser
-app.use(express.json())
-moviesApi(app)
-/*
-app.get('/json', (req, res) => {
-    res.json({ 'Hello': 'World' })
-})
+const {
+  logErrors,
+  wrapErrors,
+  errorHandler
+} = require('./utils/middleware/errorHandlers.js');
 
-Valida si el año es bisiesto 
-app.get('/bisiesto/:year', (req, res) => {
-    let anio = req.params.year;
-    console.log(anio)
-    if ((anio % 4 === 0 && anio % 100 !== 0) || anio % 400 === 0)
-        res.send(`El año ${anio} es bisiesto.`)
-    else
-        res.send(`El año ${anio} NO es bisiesto.`)
-})
-*/
-app.listen(config.port, () => {
-    console.log(`Listening: http://localhost:${config.port}`);
-})
+const notFoundHandler = require('./utils/middleware/notFoundHandler');
+
+// body parser
+app.use(express.json());
+
+// routes
+moviesApi(app);
+
+// Catch 404
+app.use(notFoundHandler);
+
+// Errors middleware
+app.use(logErrors);
+app.use(wrapErrors);
+app.use(errorHandler);
+
+app.listen(config.port, function() {
+  console.log(`Listening http://localhost:${config.port}`);
+});
