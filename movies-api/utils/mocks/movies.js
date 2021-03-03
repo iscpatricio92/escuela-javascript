@@ -1,6 +1,6 @@
 const moviesMock = [
     {
-        id: 'd2a4a062-d256-41bb-b1b2-9d915af6b75e',
+        id: '603ea1310979101235d78269',
         title: 'Notti bianche, Le (White Nights)',
         year: 2019,
         cover: 'http://dummyimage.com/800x600.png/ff4444/ffffff',
@@ -153,22 +153,43 @@ const moviesMock = [
     }
 ];
 
+//Methods mocks for tested services
+
 function filteredMoviesMock(tag) {
-    return moviesMock.filter(movie => movie.tags.includes(tag));
+    const result = moviesMock.filter((movie) => movie.tags.includes(tag));
+    return result || [];
   }
   
-  class MoviesServiceMock {
+  function finOneMovieMock(id) {
+    return moviesMock.find((movie) => movie.id === id);
+  }
+  
+  //MoviesServicesMock fort tested routes
+  class MoviesServicesMock {
     async getMovies() {
-      return Promise.resolve(moviesMock);
+      return await Promise.resolve(moviesMock);
+    }
+  
+    async getMovie({ movieId }) {
+      return await Promise.resolve(finOneMovieMock(movieId));
     }
   
     async createMovie() {
-      return Promise.resolve(moviesMock[0]);
+      return await Promise.resolve(moviesMock[1].id);
+    }
+  
+    async updateMovie() {
+      return await Promise.resolve(moviesMock[1])
+    }
+  
+    async deleteMovie () {
+      return await Promise.resolve(moviesMock[1])
     }
   }
   
   module.exports = {
     moviesMock,
     filteredMoviesMock,
-    MoviesServiceMock
+    finOneMovieMock,
+    MoviesServicesMock,
   };

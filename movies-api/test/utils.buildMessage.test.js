@@ -17,4 +17,8 @@ describe('utils - buildMessage',()=>{
             assert.strictEqual(result,expect)
         })
     })
+
+    describe('when receives an route 404',()=>{
+        
+    })
 })
