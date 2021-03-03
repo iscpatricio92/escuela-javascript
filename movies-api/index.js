@@ -1,8 +1,11 @@
 const express = require('express');
 const app = express();
+const cors = require('cors')
+const helmet = require('helmet')
 
 const { config } = require('./config/index');
 const moviesApi = require('./routes/movies.js');
+
 
 const {
   logErrors,
@@ -15,6 +18,9 @@ const notFoundHandler = require('./utils/middleware/notFoundHandler');
 // body parser
 app.use(express.json());
 
+//cors
+app.use(cors())
+app.use(helmet())
 // routes
 moviesApi(app);
 
