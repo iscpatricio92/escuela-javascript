@@ -19,7 +19,10 @@ const notFoundHandler = require('./utils/middleware/notFoundHandler');
 app.use(express.json());
 
 //cors
-app.use(cors()) // no necesario
+const corsOptions = { origin: "http://example.com" };
+app.use(cors(
+  //corsOptions
+)) // no necesario
 app.use(helmet()) // no necesario
 // routes
 moviesApi(app);

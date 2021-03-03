@@ -10,6 +10,9 @@ const {
 } = require('../utils/schemas/movies')
 const validationHandler = require('../utils/middleware/validationHandler')
 
+const cacheResponse = require('../utils/cacheResponse')
+const { FIVE_MINUTES_IN_SECONDS, SIXTY_MINUTES_IN_SECONDS } = require('../utils/time')
+
 function moviesApi(app) {
     /*
         Middleware de rutas, siempre se va a consultar la ruta
@@ -24,6 +27,7 @@ function moviesApi(app) {
         const { tags } = req.query;
         //throw new Error('Error forced')
         try {
+            cacheResponse(res,FIVE_MINUTES_IN_SECONDS)
             const movies = await moviesService.getMovies({ tags });
 
             res.status(200).json({
@@ -39,7 +43,7 @@ function moviesApi(app) {
         validationHandler({ movieId: movieIdSchema }, 'params'),
         async function (req, res, next) {
             const { movieId } = req.params;
-
+            cacheResponse(res,SIXTY_MINUTES_IN_SECONDS)
             try {
                 const movies = await moviesService.getMovie({ movieId });
 
