@@ -2,7 +2,7 @@
   Creando rutas con express
 */
 const express = require('express')
-const MovieService = require('../service/movies')
+const MovieService = require('../services/movies')
 const {
     movieIdSchema,
     updateMovieSchema,
