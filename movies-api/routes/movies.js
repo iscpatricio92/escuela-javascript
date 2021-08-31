@@ -13,7 +13,7 @@ const validationHandler = require('../utils/middleware/validationHandler')
 const cacheResponse = require('../utils/cacheResponse')
 const { FIVE_MINUTES_IN_SECONDS, SIXTY_MINUTES_IN_SECONDS } = require('../utils/time')
 
-function moviesApi(app) {
+function userMoviesApi(app) {
     /*
         Middleware de rutas, siempre se va a consultar la ruta
         /api/movies antes que cualquier otra.
@@ -141,4 +141,4 @@ function moviesApi(app) {
 }
 
 
-module.exports = moviesApi;
+module.exports = userMoviesApi;
