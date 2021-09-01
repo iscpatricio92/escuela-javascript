@@ -2,6 +2,7 @@
   Creando rutas con express
 */
 const express = require('express')
+const passport = require('passport')
 const MovieService = require('../services/movies')
 const {
     movieIdSchema,
@@ -13,6 +14,9 @@ const validationHandler = require('../utils/middleware/validationHandler')
 const cacheResponse = require('../utils/cacheResponse')
 const { FIVE_MINUTES_IN_SECONDS, SIXTY_MINUTES_IN_SECONDS } = require('../utils/time')
 
+//strategy jwt
+require('../utils/auth/strategies/jwt')
+
 function userMoviesApi(app) {
     /*
         Middleware de rutas, siempre se va a consultar la ruta
@@ -23,11 +27,11 @@ function userMoviesApi(app) {
 
     const moviesService = new MovieService();
 
-    router.get('/', async function (req, res, next) {
+    router.get('/', passport.authenticate('jwt', { session: false }), async function (req, res, next) {
         const { tags } = req.query;
         //throw new Error('Error forced')
         try {
-            cacheResponse(res,FIVE_MINUTES_IN_SECONDS)
+            cacheResponse(res, FIVE_MINUTES_IN_SECONDS)
             const movies = await moviesService.getMovies({ tags });
 
             res.status(200).json({
@@ -40,10 +44,11 @@ function userMoviesApi(app) {
     });
 
     router.get('/:movieId',
+        passport.authenticate('jwt', { session: false }),
         validationHandler({ movieId: movieIdSchema }, 'params'),
         async function (req, res, next) {
             const { movieId } = req.params;
-            cacheResponse(res,SIXTY_MINUTES_IN_SECONDS)
+            cacheResponse(res, SIXTY_MINUTES_IN_SECONDS)
             try {
                 const movies = await moviesService.getMovie({ movieId });
 
@@ -58,6 +63,7 @@ function userMoviesApi(app) {
 
     /** create movie*/
     router.post('/',
+        passport.authenticate('jwt', { session: false }),
         validationHandler({ movieId: movieIdSchema }, 'params'),
         validationHandler(createMovieSchema),
         async (req, res, next) => {
@@ -76,6 +82,7 @@ function userMoviesApi(app) {
 
     /** update movie */
     router.put('/:movieId',
+        passport.authenticate('jwt', { session: false }),
         validationHandler({ movieId: movieIdSchema }, 'params'),
         validationHandler(updateMovieSchema),
         async (req, res, next) => {
@@ -95,6 +102,7 @@ function userMoviesApi(app) {
 
     /** update patchmovie */
     router.patch('/:movieId',
+        passport.authenticate('jwt', { session: false }),
         validationHandler({ movieId: movieIdSchema }, 'params'),
         validationHandler(updateMovieSchema),
         async (req, res, next) => {
@@ -114,6 +122,7 @@ function userMoviesApi(app) {
 
     /** delete movie */
     router.delete('/:movieId',
+        passport.authenticate('jwt', { session: false }),
         validationHandler({ movieId: movieIdSchema }, 'params'),
         async (req, res, next) => {
             const { movieId } = req.params;
@@ -131,7 +140,6 @@ function userMoviesApi(app) {
 
     router.get('/bisiesto/:year', (req, res) => {
         let anio = req.params.year;
-        console.log(anio)
         if ((anio % 4 === 0 && anio % 100 !== 0) || anio % 400 === 0)
             res.send(`El año ${anio} es bisiesto.`)
         else
