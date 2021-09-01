@@ -5,7 +5,8 @@ const helmet = require('helmet')
 
 const { config } = require('./config/index');
 const moviesApi = require('./routes/movies.js');
-const userMoviesApi = require('./routes/movies')
+const userMoviesApi = require('./routes/movies');
+const authApi = require('./routes/auth');
 
 
 const {
@@ -20,7 +21,6 @@ const notFoundHandler = require('./utils/middleware/notFoundHandler');
 app.use(express.json());
 
 //cors
-//const corsOptions = { origin: "http://example.com" };
 app.use(cors(
   //corsOptions
 )) // no necesario
@@ -28,6 +28,7 @@ app.use(helmet()) // no necesario
 // routes
 moviesApi(app);
 userMoviesApi(app);
+authApi(app);
 
 // Catch 404
 app.use(notFoundHandler);
@@ -38,5 +39,5 @@ app.use(wrapErrors);
 app.use(errorHandler);
 
 app.listen(config.port, function () {
-  console.log(`Listening http://localhost:${config.port}`);
+  console.log('Listening http://localhost %s',config.port);
 });

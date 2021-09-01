@@ -2,13 +2,13 @@ const {config} = require('../../config');
 
 const usersMock = [
   {
-    email: 'root@undefined.sh',
+    email: 'patricio.gomez@sngular.com',
     name: 'ROOT',
     password: config.defaultAdminPassword,
     isAdmin: true,
   },
   {
-    email: 'jose@undefined.sh',
+    email: 'isc.patricio@gmail.com',
     name: 'Jose Maria',
     password: config.defaultUserPassword,
   },
